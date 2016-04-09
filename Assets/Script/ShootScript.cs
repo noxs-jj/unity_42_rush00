@@ -6,7 +6,7 @@ public class ShootScript : MonoBehaviour {
 	[HideInInspector] public int		id;
 	public int type = 0;
 	private Vector3 shootDir = Vector3.zero;
-	private float speed = 2;
+	private float speed = 10;
 	private bool	isMoving;
 	private IEnumerator life;
 	// Use this for initialization
@@ -36,6 +36,7 @@ public class ShootScript : MonoBehaviour {
 		Vector3 moveDirection = transform.position - MasterPos; 
 		if (moveDirection != Vector3.zero)
 		{
+			Debug.Log ("hello");
 			float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 			transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		}

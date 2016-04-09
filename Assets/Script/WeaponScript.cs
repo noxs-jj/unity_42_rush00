@@ -35,15 +35,15 @@ public class WeaponScript : MonoBehaviour {
 			fireRate = 0.5f;
 		} else if (weaponType == WeaponType.UZI) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/UziShoot") as GameObject;
-			ammo = 100;
+			ammo = 150;
 			fireRate = 0.1f;
 		} else if (weaponType == WeaponType.SHOTGUN) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/ShotgunShoot") as GameObject;
-			ammo = 30;
+			ammo = 50;
 			fireRate = 1;
 		} else if (weaponType == WeaponType.SNIPER) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/SniperShoot") as GameObject;
-			ammo = 20;
+			ammo = 30;
 			fireRate = 3;
 		}
 		this.uzi_weared_sprite = GameObject.Find ("weared_Uzi_1").GetComponent<SpriteRenderer>();
@@ -90,7 +90,8 @@ public class WeaponScript : MonoBehaviour {
 			if (ammo != -1)
 				ammo -= 1;
 			dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
-			GameObject obj = Instantiate(shoot, transform.position, Quaternion.identity) as GameObject;
+			pos = transform.position + dir;
+			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;
 			if (weaponType == WeaponType.SABER)
 				obj.GetComponent<ShootScript>().InitShoot(dir, false, 0, transform.position);
 			else
