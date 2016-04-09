@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Camera : MonoBehaviour {
+public class cameraPlayer : MonoBehaviour {
 
 	private GameObject	main_player_object;
 	private mainPlayer	main_player_script;

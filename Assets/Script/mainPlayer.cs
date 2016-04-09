@@ -1,17 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class mainPlayer : MonoBehaviour {
-
 	private float			speed = 5;
 	private bool			haveWeapons = false;
 	private GameObject		onWeapon = null;
 	private WeaponScript	weapon = null;
 	private Animator		animator;
+	
+	//mouseCursor
+	private mouseCursor		mouse_script;
+	public GameObject		player_cam_object;
+	private Camera			player_camera;
+
 
 	// Use this for initialization
 	void Start () {
-		animator = GetComponentInChildren<Animator>();
+		this.animator = GetComponentInChildren<Animator>();
+		this.mouse_script = gameObject.GetComponent<mouseCursor>();
+		this.player_cam_object = GameObject.Find("Main Camera");
+		this.player_camera = this.player_cam_object.GetComponent<Camera> ();
 	}
 	
 	// Update is called once per frame
@@ -20,7 +29,7 @@ public class mainPlayer : MonoBehaviour {
 		if (Input.GetKey (KeyCode.W)) {
 			isMoving = true;
 			transform.Translate(Vector3.up * Time.deltaTime * speed);
-		}else if (Input.GetKey (KeyCode.S)) {
+		} else if (Input.GetKey (KeyCode.S)) {
 			isMoving = true;
 			transform.Translate(Vector3.down * Time.deltaTime * speed);
 		}
@@ -39,7 +48,16 @@ public class mainPlayer : MonoBehaviour {
 			TakeWeapon ();
 		if (Input.GetMouseButtonDown (1) && haveWeapons == true)
 			DropWeapon ();
+
+		//mouse
+		update_mouse_position ();
 	}
+
+	void update_mouse_position(){
+		Vector3 mousePos = this.player_camera.ScreenToWorldPoint(Input.mousePosition);
+		gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, -(mousePos - transform.position));
+	}
+
 
 	void TakeWeapon() {
 		if (onWeapon != null) {
