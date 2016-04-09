@@ -9,20 +9,38 @@ public class Enemy : MonoBehaviour {
 	private int   	time;
 	
 	// Control
-	public GameObject cible;
+	public GameObject 	 cible;
+	private bool 	  	 trigger;
+	private bool	  	 wait;
+	private IEnumerator	 shoot;
+	private bool		 isShoot = false;
+	private GameObject 	 onWeapon;
+	private WeaponScript weapon;
+
+	//audio
+	private AudioSource  audioSrc;
+	public AudioClip 	 deathSound;
 	
-	private AudioSource audioSrc;
-	public AudioClip attackSound;
-	
-	
+	//propriete
+	private int life = 10;
+	private bool haveWeapons = false;
+	public bool alert = false;
+
+	public enum headType
+	{
+		YELLOW_HEAD,
+		RED_HEAD,
+		AFRO_HEAD,
+	}
+
 	// Use this for initialization
 	void Start () {
-		 //this.audioSrc = gameObject.GetComponent<AudioSource> ();
-		//this.cible = null;
+		this.audioSrc = gameObject.GetComponent<AudioSource> ();
 		this.animate = gameObject.GetComponent<Animator> ();
-		
-		//this.animate.SetTrigger ("idle");
+		trigger = false;
+		wait = false;
 		time = Mathf.RoundToInt(Time.time);
+		ciblePosition = transform.position;
 	}
 	
 	public void    rotateEnemy(Vector3 pToGo)
@@ -35,62 +53,71 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (cible && cible.transform.position != transform.position)
-			moveToPoint (cible.transform.position.x, cible.transform.position.y);
-		else if (cible == null || cible && cible.transform.position == transform.position) {
-			animate.SetTrigger ("move");
-		}
-		if (this.transform.position == this.ciblePosition)
-			this.animate.SetTrigger ("move");
-		if (cible && cible.transform.position != transform.position) {
-			float step = 1 * Time.deltaTime;
-			this.transform.position = Vector3.MoveTowards(this.transform.position, this.ciblePosition, step);
+		if (alert && cible) {
+			awake ();
+		} else {
+			alert = false;
 		}
 	}
-	
-	public void moveToPoint (float pMouseX, float pMouseY) {
-		if (cible)
-			ciblePosition = cible.transform.position;
-		else {
-			//this.mousePosition = Camera.main.ScreenToWorldPoint (new Vector3 (pMouseX, pMouseY, 0));
-			this.ciblePosition.z = 0;
+
+	void awake () {
+		if (life <= 0) {
+			death ();
 		}
+		if (cible) {
+			ciblePosition = cible.transform.position;
+			moveToPoint (ciblePosition);
+			if ( cible.transform.CompareTag ("Player") && haveWeapons == true && isShoot == false)
+				StartShoot ();
+		} else {
+			ciblePosition = this.transform.position;
+		}
+		if ( isShoot == true && !cible)
+			StopShoot ();
+	}
+	
+	public void moveToPoint (Vector3 posTarget) {
 		rotateEnemy (this.ciblePosition);
-		Debug.Log ("move");
-		animate.SetTrigger ("move");
+		animate.SetBool ("move", true);
+		float step = 3 * Time.deltaTime;
+		transform.position = Vector3.MoveTowards (transform.position, posTarget, step);
 	}
 	
 	public void setCible(GameObject target) {
 		this.cible = target;
 	}
 	
-	/*public void OnTriggerStay2D(Collider2D collider) {
-		if ((collider.transform.CompareTag("player") || collider.transform.CompareTag("Orc")) && cible && cible.gameObject == collider.gameObject)
-		{
-			animate.SetBool ("isFighting", true);
-			animate.SetBool ("isWalking", false);
-			this.mousePosition = this.transform.position;
-			
-			if (Mathf.RoundToInt(Time.time) - time > 1) {
-				if (collider.transform.CompareTag("OrcHouse")) {
-					collider.gameObject.GetComponent<House>().life -= 5;
-					if (collider.transform.name == "MainHouse")
-						Debug.Log ("Town hall Orc [" + cible.GetComponent<House> ().life + "/400]HP has been attacked." );
-					else
-						Debug.Log ("House Orc [" + cible.GetComponent<House> ().life + "/100]HP has been attacked." );
-				}
-				else {
-					collider.gameObject.GetComponent<Orc>().life -= 10;
-					Debug.Log ("Orc Unit [" + cible.GetComponent<Orc>().life + "/50]HP has been attacked." );
-				}
-				audioSrc.PlayOneShot(attackSound);
-				time = Mathf.RoundToInt(Time.time);
+	public void OnTriggerStay2D(Collider2D collider) {
+		if (collider.transform.CompareTag ("Player")) {
+			animate.SetBool ("move", false);
+			setCible(collider.gameObject);
+			awake();
+		} else if (collider.tag == "Weapons") {
+			if (haveWeapons == false) {
+				onWeapon = collider.gameObject;
+				weapon = onWeapon.GetComponent<WeaponScript>();
+				weapon.DoTakeWeapon(gameObject);
+				haveWeapons = true;
 			}
 		}
-	}*/
-	
-	/*public void OnTriggerExit2D(Collider2D collider)
-	{
-		animate.SetBool ("isFighting", false);
-	}*/
+	}
+
+	public void death() {
+		audioSrc.PlayOneShot(deathSound);
+		weapon.DoDropWeapon(transform.position);
+		GameObject.Destroy (gameObject);
+	}
+
+	void StartShoot() {
+		Debug.Log("shot");
+		isShoot = true;
+		shoot = weapon.DoShoot(gameObject);
+		StartCoroutine (shoot);
+	}
+
+	void StopShoot() {
+		Debug.Log("unshot");
+		isShoot = false;
+		StopCoroutine (shoot);
+	}
 }
