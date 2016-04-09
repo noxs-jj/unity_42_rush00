@@ -3,29 +3,67 @@ using System.Collections;
 
 public class mainPlayer : MonoBehaviour {
 
-	private float speed = 5;
-//	private Rigidbody2D	rbody;
+	private float			speed = 5;
+	private bool			haveWeapons = false;
+	private GameObject		onWeapon = null;
+	private WeaponScript	weapon = null;
+	private Animator		animator;
 
 	// Use this for initialization
 	void Start () {
-//		rbody = GetComponent<Rigidbody2D>();
+		animator = GetComponentInChildren<Animator>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		bool isMoving = false;
 		if (Input.GetKey (KeyCode.W)) {
-//			transform.position = new Vector2(transform.position.x, transform.position.y + 1.0f);
+			isMoving = true;
 			transform.Translate(Vector3.up * Time.deltaTime * speed);
 		}else if (Input.GetKey (KeyCode.S)) {
-//			transform.position = new Vector2(transform.position.x, transform.position.y - 1.0f);
+			isMoving = true;
 			transform.Translate(Vector3.down * Time.deltaTime * speed);
 		}
 		if (Input.GetKey (KeyCode.A)) {
-//			transform.position = new Vector2(transform.position.x - 1.0f, transform.position.y);
+			isMoving = true;
 			transform.Translate(Vector3.left * Time.deltaTime * speed);
 		} else if (Input.GetKey (KeyCode.D)) {
-//			transform.position = new Vector2(transform.position.x + 1.0f, transform.position.y);
+			isMoving = true;
 			transform.Translate(Vector3.right * Time.deltaTime * speed);
 		}
+		if (isMoving == true)
+			animator.SetTrigger ("move");
+		else
+			animator.SetTrigger ("idle");
+		if (Input.GetKeyDown (KeyCode.E) && haveWeapons == false)
+			TakeWeapon ();
+		if (Input.GetMouseButtonDown (1) && haveWeapons == true)
+			DropWeapon ();
+	}
+
+	void TakeWeapon() {
+		if (onWeapon != null) {
+			haveWeapons = true;
+			weapon = onWeapon.GetComponent<WeaponScript>();
+			weapon.DoTakeWeapon(gameObject);
+		}
+	}
+
+	void DropWeapon() {
+		if (weapon != null) {
+			haveWeapons = false;
+			weapon.DoDropWeapon(transform.position);
+			weapon = null;
+		}
+	}
+
+	void OnTriggerEnter2D(Collider2D collide) {
+		if (collide.tag == "Weapons") {
+			onWeapon = collide.gameObject;
+		}
+	}
+
+	void OnTriggerExit2D(Collider2D collide) {
+		onWeapon = null;
 	}
 }
