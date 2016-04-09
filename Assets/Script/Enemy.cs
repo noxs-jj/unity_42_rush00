@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 
@@ -15,7 +16,7 @@ public class Enemy : MonoBehaviour {
 	private IEnumerator	 shoot;
 	private bool		 isShoot = false;
 	private GameObject 	 onWeapon;
-	private WeaponScript weapon;
+	private WeaponScriptEnemy weapon;
 
 	//audio
 	private AudioSource  audioSrc;
@@ -28,13 +29,34 @@ public class Enemy : MonoBehaviour {
 
 	public enum headType
 	{
-		YELLOW_HEAD,
-		RED_HEAD,
-		AFRO_HEAD,
+		BODY_1,
+		BODY_2,
+		BODY_3,
+		HEAD_1,
+		HEAD_2,
+		HEAD_3,
+		HEAD_4,
+		HEAD_5,
+		HEAD_6,
+		HEAD_7
 	}
+
+	private SpriteRenderer	body;
+	private SpriteRenderer	head;
 
 	// Use this for initialization
 	void Start () {
+
+		///body random
+		/*int body = Random.Range (0, 3);
+		if (body == 2) {
+			gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = GameObject.Find ("body_1").GetComponent<Sprite> ();
+		} else if (body == 2) {
+			gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = GameObject.Find ("body_2").GetComponent<Sprite> ();
+		} else {
+			gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = GameObject.Find ("body_3").GetComponent<Sprite> ();
+		}*/
+
 		this.audioSrc = gameObject.GetComponent<AudioSource> ();
 		this.animate = gameObject.GetComponent<Animator> ();
 		trigger = false;
@@ -95,8 +117,8 @@ public class Enemy : MonoBehaviour {
 		} else if (collider.tag == "Weapons") {
 			if (haveWeapons == false) {
 				onWeapon = collider.gameObject;
-				weapon = onWeapon.GetComponent<WeaponScript>();
-				weapon.DoTakeWeapon(gameObject);
+				weapon = onWeapon.GetComponent<WeaponScriptEnemy>();
+				weapon.DoTakeWeapon(gameObject, cible);
 				haveWeapons = true;
 			}
 		}
