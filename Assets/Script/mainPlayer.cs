@@ -18,7 +18,7 @@ public class mainPlayer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		this.animator = GetComponentInChildren<Animator>();
-		this.mouse_script = gameObject.GetComponent<mouseCursor>();
+		//this.mouse_script = gameObject.GetComponent<mouseCursor>();
 		this.player_cam_object = GameObject.Find("Main Camera");
 		this.player_camera = this.player_cam_object.GetComponent<Camera> ();
 	}

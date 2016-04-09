@@ -3,14 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class mouseCursor : MonoBehaviour {
-	private mainPlayer	player_script;
+//	private mainPlayer	player_script;
 	private Texture2D	mouse_cursor;
 
 	// Use this for initialization
 	void Start () {
 		CursorMode	cursorMode = CursorMode.Auto;
 
-		this.player_script = gameObject.GetComponent<mainPlayer> ();
+//		this.player_script = gameObject.GetComponent<mainPlayer> ();
 		this.mouse_cursor = Resources.Load ("Sprites/hud/cursor") as Texture2D;
 		Cursor.SetCursor(this.mouse_cursor, Vector2.zero, cursorMode);
 	}
