@@ -32,3 +32,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+**/trash_do_not_push
+**/Assets/trash_do_not_push.meta
