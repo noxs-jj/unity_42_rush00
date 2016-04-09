@@ -65,6 +65,7 @@ public class WeaponScript : MonoBehaviour {
 	}
 	
 	public void DoDropWeapon (Vector3 playerPos) {
+		gameObject.GetComponent<SpriteRenderer> ().enabled = true;
 		transform.parent = null;
 		transform.position = playerPos;
 		power = 100;
@@ -77,7 +78,8 @@ public class WeaponScript : MonoBehaviour {
 	
 	public void DoTakeWeapon (GameObject obj) {
 		transform.parent = obj.transform;
-		DoTakeWearedWeaponSkin (obj.name);
+		DoTakeWearedWeaponSkin ();
+		gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 	}
 	
 	public IEnumerator DoShoot(GameObject master) {
@@ -106,14 +108,14 @@ public class WeaponScript : MonoBehaviour {
 		this.sniper_weared_sprite.enabled = false;
 	}
 	
-	private void DoTakeWearedWeaponSkin(string nameWeapon){
-		if ("weared_Uzi_1".Contains (nameWeapon)) {
+	private void DoTakeWearedWeaponSkin(){
+		if (weaponType == WeaponType.UZI) {
 			this.uzi_weared_sprite.enabled = true;
-		} else if ("weared_Shotgun_2".Contains (nameWeapon)) {
+		} else if (weaponType == WeaponType.SHOTGUN) {
 			this.shotgun_weared_sprite.enabled = true;
-		} else if ("weared_Saber_5".Contains (nameWeapon)) {
+		} else if (weaponType == WeaponType.SABER) {
 			this.sword_weared_sprite.enabled = true;
-		} else if ("weared_Uzi_1".Contains (nameWeapon)) {
+		} else if (weaponType == WeaponType.SNIPER) {
 			this.sniper_weared_sprite.enabled = true;
 		}
 	}
