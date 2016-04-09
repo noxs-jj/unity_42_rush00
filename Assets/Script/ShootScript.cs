@@ -16,11 +16,14 @@ public class ShootScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		Vector3 dir = transform.position + shootDir;
 		if (isMoving == true)
-			transform.Translate(shootDir * Time.deltaTime * speed);
+//			transform.position = Vector2.MoveTowards (transform.position, dir, Time.deltaTime * speed);
+			transform.position += (shootDir * Time.deltaTime * speed);
+//			transform.Translate(shootDir * Time.deltaTime * speed);
 	}
 
-	public void InitShoot(Vector3 dir, bool move, int idMaster) {
+	public void InitShoot(Vector3 dir, bool move, int idMaster, Vector3 MasterPos) {
 		shootDir = dir;
 		isMoving = move;
 		id = idMaster;
@@ -28,7 +31,14 @@ public class ShootScript : MonoBehaviour {
 			life = lifeTime();
 			StartCoroutine(life);
 		}
+	
 
+		Vector3 moveDirection = transform.position - MasterPos; 
+		if (moveDirection != Vector3.zero)
+		{
+			float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+		}
 
 	}
 

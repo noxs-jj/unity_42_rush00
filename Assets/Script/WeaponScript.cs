@@ -59,7 +59,7 @@ public class WeaponScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (power > 0) {
-			transform.Translate(dropDir * Time.deltaTime * power);
+			transform.position = Vector2.MoveTowards (transform.position, dropDir, Time.deltaTime * power);
 			power =- 0.1f;
 		}
 	}
@@ -68,11 +68,12 @@ public class WeaponScript : MonoBehaviour {
 		gameObject.GetComponent<SpriteRenderer> ().enabled = true;
 		transform.parent = null;
 		transform.position = playerPos;
-		power = 100;
-		dropDir = Vector3.up; // change this with mouse dir
+		power = 125;
+		Vector3 mousePos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+		dropDir = mousePos;
+
+
 		DoDropWearedWeaponSkin ();
-		//		Vector3 mouse = Ca
-		//		Camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y)
 		
 	}
 	
@@ -88,14 +89,12 @@ public class WeaponScript : MonoBehaviour {
 		while (ammo != 0) {
 			if (ammo != -1)
 				ammo -= 1;
-			pos = master.transform.position;
-			dir = Vector3.right; // change with mouse dir
-			pos += dir;
-			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;
+			dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
+			GameObject obj = Instantiate(shoot, transform.position, Quaternion.identity) as GameObject;
 			if (weaponType == WeaponType.SABER)
-				obj.GetComponent<ShootScript>().InitShoot(dir, false, 0);
+				obj.GetComponent<ShootScript>().InitShoot(dir, false, 0, transform.position);
 			else
-				obj.GetComponent<ShootScript>().InitShoot(dir, true, 0);
+				obj.GetComponent<ShootScript>().InitShoot(dir, true, 0, transform.position);
 			yield return new WaitForSeconds (fireRate);
 		}
 	}

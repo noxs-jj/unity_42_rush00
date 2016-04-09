@@ -29,7 +29,6 @@ public class mainPlayer : MonoBehaviour {
 		if (Input.GetKey (KeyCode.W)) {
 			isMoving = true;
 			transform.position += Vector3.up * Time.deltaTime * speed;
-			//			transform.Translate(Vector3.up * Time.deltaTime * speed);
 		}else if (Input.GetKey (KeyCode.S)) {
 			isMoving = true;
 			transform.position += Vector3.down * Time.deltaTime * speed;
@@ -82,14 +81,12 @@ public class mainPlayer : MonoBehaviour {
 	}
 	
 	void StartShoot() {
-		Debug.Log("start shooting");
 		isShoot = true;
 		shoot = weapon.DoShoot(gameObject);
 		StartCoroutine (shoot);
 	}
 	
 	void StopShoot() {
-		Debug.Log("stop shooting");
 		isShoot = false;
 		StopCoroutine (shoot);
 	}
