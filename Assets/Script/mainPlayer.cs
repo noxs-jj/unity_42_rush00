@@ -81,22 +81,22 @@ public class mainPlayer : MonoBehaviour {
 	}
 
 	void DarkFunction() {
-		if (Input.GetKey (KeyCode.UpArrow) && code > 1)
+		if (Input.GetKey (KeyCode.UpArrow) && code < 2)
 			code++;
 		else if (Input.GetKey (KeyCode.DownArrow) && code >= 2 && code < 4)
 			code++;
-		else if (Input.GetKey (KeyCode.LeftArrow) && code == 4 && code == 6)
+		else if (Input.GetKey (KeyCode.LeftArrow) && (code == 4 || code == 6))
 			code++;
-		else if (Input.GetKey (KeyCode.RightArrow) && code == 5 && code == 7)
+		else if (Input.GetKey (KeyCode.RightArrow) && (code == 5 || code == 7))
 			code++;
 		else if (Input.GetKey (KeyCode.B) && code == 8)
 			code++;
 		else if (Input.GetKey (KeyCode.A) && code == 9)
 			code++;
 		if (code == 9) {
-//			Instantiate(shoot, transform.position, Quaternion.identity);
+			Instantiate(DarkWeapon, transform.position, Quaternion.identity);
+			code = 0;
 		}
-
 	}
 
 	void FindWeaponArms() {
