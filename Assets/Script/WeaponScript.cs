@@ -47,6 +47,7 @@ public class WeaponScript : MonoBehaviour {
 	
 	public void DoDropWeapon (Vector3 playerPos) {
 		gameObject.GetComponent<SpriteRenderer> ().enabled = true;
+		gameObject.GetComponent<BoxCollider2D> ().enabled = true;
 		transform.parent = null;
 		transform.position = playerPos;
 		power = 125;
@@ -73,6 +74,7 @@ public class WeaponScript : MonoBehaviour {
 	public void DoTakeWeapon (GameObject obj) {
 		transform.parent = obj.transform;
 		gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+		gameObject.GetComponent<BoxCollider2D> ().enabled = false;
 		if (obj.tag == "enemie")
 			ammo = -1;
 		else
@@ -89,6 +91,23 @@ public class WeaponScript : MonoBehaviour {
 				ammo -= 1;
 			AudioSource.PlayClipAtPoint(audioShoot, transform.position);
 			dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
+			pos = transform.position + dir;
+			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;
+			if (weaponType == WeaponType.SABER)
+				obj.GetComponent<ShootScript>().InitShoot(dir, false, 0, transform.position);
+			else
+				obj.GetComponent<ShootScript>().InitShoot(dir, true, 0, transform.position);
+			yield return new WaitForSeconds (fireRate);
+		}
+	}
+
+	public IEnumerator DoShootEnemy(GameObject master, GameObject target) {
+		Vector3 pos;
+		Vector3 dir;
+		while (ammo != 0) {
+			if (ammo != -1)
+				ammo -= 1;
+			dir = (target.transform.position - master.transform.position).normalized;
 			pos = transform.position + dir;
 			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;
 			if (weaponType == WeaponType.SABER)

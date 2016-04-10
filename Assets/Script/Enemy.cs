@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour {
 	//audio
 	private AudioSource  audioSrc;
 	public AudioClip 	 deathSound;
+	public AudioClip 	 targetSound;
 	
 	//propriete
 	private int life = 10;
@@ -179,6 +180,14 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	public void OnTriggerEnter2D(Collider2D collider) {
+		if (collider.transform.CompareTag ("Player")) {
+			if (!alert) {
+				audioSrc.PlayOneShot (targetSound);
+	 		}
+		}
+	}
+
 
 	public void HitEnemy(int hit) {
 		if (life - hit <= 0) {
@@ -200,7 +209,7 @@ public class Enemy : MonoBehaviour {
 
 	void StartShoot() {
 		isShoot = true;
-		shoot = weapon.DoShoot(gameObject);
+		shoot = weapon.DoShootEnemy(gameObject, cible);
 		StartCoroutine (shoot);
 	}
 
