@@ -184,18 +184,21 @@ public class Enemy : MonoBehaviour {
 		if (collider.transform.CompareTag ("Player")) {
 			if (!alert) {
 				audioSrc.PlayOneShot (targetSound);
-	 		}
+			}
+		} else if (collider.tag == "Shoot" && collider.gameObject.GetComponent<ShootScript> ().GetMasterId () != 1) {
+			HitEnemy(collider.GetComponent<ShootScript>().degat);
 		}
 	}
 
 
 	public void HitEnemy(int hit) {
-		if (life - hit <= 0) {
-			hit = 0;
-			Death ();
-		} else {
-			life -= hit;
-		}
+		Death ();
+//		if (life - hit <= 0) {
+//			hit = 0;
+//			Death ();
+//		} else {
+//			life -= hit;
+//		}
 	}
 	
 	public void Death() {
