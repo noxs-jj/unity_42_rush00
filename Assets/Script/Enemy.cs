@@ -213,9 +213,6 @@ public class Enemy : MonoBehaviour {
 				haveWeapons = true;
 				DoTakeWearedWeaponSkin();
 			}
-		} else if (collider.tag == "Shoot") {
-			Debug.Log(life);
-			HitEnemy(collider.GetComponent<ShootScript>().degat);
 		}
 	}
 
@@ -225,7 +222,6 @@ public class Enemy : MonoBehaviour {
 				audioSrc.PlayOneShot (targetSound);
 			}
 		} else if (collider.tag == "Shoot" && collider.gameObject.GetComponent<ShootScript> ().GetMasterId () != 1) {
-
 			HitEnemy(collider.GetComponent<ShootScript>().degat);
 		}
 	}

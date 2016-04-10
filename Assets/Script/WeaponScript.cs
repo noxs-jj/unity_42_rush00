@@ -91,12 +91,12 @@ public class WeaponScript : MonoBehaviour {
 				ammo -= 1;
 			AudioSource.PlayClipAtPoint(audioShoot, transform.position);
 			dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
-			pos = transform.position + dir;
-			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;
+			pos = transform.position + (dir * 2);
+			GameObject obj = Instantiate(shoot, transform.position, Quaternion.identity) as GameObject;
 			if (weaponType == WeaponType.SABER)
-				obj.GetComponent<ShootScript>().InitShoot(dir, false, 0, transform.position);
+				obj.GetComponent<ShootScript>().InitShoot(dir, false, 0, pos);
 			else
-				obj.GetComponent<ShootScript>().InitShoot(dir, true, 0, transform.position);
+				obj.GetComponent<ShootScript>().InitShoot(dir, true, 0, pos);
 			yield return new WaitForSeconds (fireRate);
 		}
 	}
@@ -109,12 +109,12 @@ public class WeaponScript : MonoBehaviour {
 				ammo -= 1;
 			AudioSource.PlayClipAtPoint(audioShoot, transform.position);	
 			dir = (target.transform.position - master.transform.position).normalized;
-			pos = transform.position + dir;
-			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;
+			pos = transform.position + (dir * 2);
+			GameObject obj = Instantiate(shoot, transform.position, Quaternion.identity) as GameObject;
 			if (weaponType == WeaponType.SABER)
-				obj.GetComponent<ShootScript>().InitShoot(dir, false, 1, transform.position);
+				obj.GetComponent<ShootScript>().InitShoot(dir, false, 1, pos);
 			else
-				obj.GetComponent<ShootScript>().InitShoot(dir, true, 1, transform.position);
+				obj.GetComponent<ShootScript>().InitShoot(dir, true, 1, pos);
 			yield return new WaitForSeconds (fireRate);
 		}
 	}
