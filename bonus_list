@@ -1,3 +1,8 @@
-- les ennemies aleatoires
 - enemies capable de prendre drop des armes
-- plus que armes 
+- plus que armes
+- skin d'enemie aleatoire
+- path enemie aleatoire avec pathfinding PUR 2D
+- Menu PAUSE
+- Plusieurs Levels
+- Son Metal Gear Solid lors d'une detection enemie
+- arme avec cadence de tir different
