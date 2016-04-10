@@ -42,9 +42,12 @@ public class Enemy : MonoBehaviour {
 
 	public RoomScript[]		roomptr;
 	private bool			isCheckpoint = false;
+	private GameObject		playerPtr;
 
 	// Use this for initialization
 	void Start () {
+
+		playerPtr = GameObject.Find ("Player") as GameObject;
 
 		//body Head random
 		int i;
@@ -153,8 +156,15 @@ public class Enemy : MonoBehaviour {
 	
 
 	void ChangeCible() {
-		roomptr = (cible.GetComponent<RoomScript> ()).RoomListScript;
-		setCible (null);
+		if ((cible.GetComponent<RoomScript> ()).LocalCost == 0) {
+			cible = playerPtr;
+			isCheckpoint = false;
+			alert = true;	
+		}
+		else {
+			roomptr = (cible.GetComponent<RoomScript> ()).RoomListScript;
+			setCible (null);
+		}
 	}
 
 	public void setCible(GameObject target) {
@@ -168,8 +178,12 @@ public class Enemy : MonoBehaviour {
 					tmp = room;
 				}
 			}
-			isCheckpoint = true;
-			this.cible = tmp.gameObject;
+			if (costTmp != 0) {
+				isCheckpoint = true;
+				this.cible = tmp.gameObject;
+			}
+			else
+				cible = playerPtr;
 		}
 		else if (target != null)
 			this.cible = target;
