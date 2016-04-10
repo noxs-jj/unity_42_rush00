@@ -20,26 +20,21 @@ public class WeaponScript : MonoBehaviour {
 	private Vector3			dropDir;
 	private GameObject		shoot;
 	private float			fireRate = 1;
+	private AudioClip		audioNoAmmo;
 	
 	// Use this for initialization
 	void Start () {
 		if (weaponType == WeaponType.SABER) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/SaberShoot") as GameObject;
-			ammo = -1;
-			fireRate = 0.5f;
 		} else if (weaponType == WeaponType.UZI) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/UziShoot") as GameObject;
-			ammo = 150;
-			fireRate = 0.1f;
 		} else if (weaponType == WeaponType.SHOTGUN) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/ShotgunShoot") as GameObject;
-			ammo = 50;
-			fireRate = 1;
 		} else if (weaponType == WeaponType.SNIPER) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/SniperShoot") as GameObject;
-			ammo = 30;
-			fireRate = 3;
 		}
+		initAmmo ();
+		audioNoAmmo = Resources.Load ("Audio/Sounds/dry_fire") as AudioClip;
 	}
 	
 	// Update is called once per frame
@@ -59,16 +54,36 @@ public class WeaponScript : MonoBehaviour {
 		dropDir = mousePos;	
 	}
 
+	void initAmmo() {
+		if (weaponType == WeaponType.SABER) {
+			ammo = -1;
+			fireRate = 0.5f;
+		} else if (weaponType == WeaponType.UZI) {
+			ammo = 150;
+			fireRate = 0.1f;
+		} else if (weaponType == WeaponType.SHOTGUN) {
+			ammo = 50;
+			fireRate = 1;
+		} else if (weaponType == WeaponType.SNIPER) {
+			ammo = 30;
+			fireRate = 3;
+		}
+	}
+
 	public void DoTakeWeapon (GameObject obj) {
 		transform.parent = obj.transform;
 		gameObject.GetComponent<SpriteRenderer> ().enabled = false;
 		if (obj.tag == "enemie")
 			ammo = -1;
+		else
+			initAmmo ();
 	}
 	
 	public IEnumerator DoShoot(GameObject master) {
 		Vector3 pos;
 		Vector3 dir;
+		if (ammo == 0)
+			AudioSource.PlayClipAtPoint(audioNoAmmo, transform.position);
 		while (ammo != 0) {
 			if (ammo != -1)
 				ammo -= 1;
