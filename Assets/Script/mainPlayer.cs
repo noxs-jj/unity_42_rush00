@@ -164,6 +164,7 @@ public class mainPlayer : MonoBehaviour {
 	void	die() {
 		if (isShoot == true)
 			StopCoroutine (shoot);
+		AudioSource.PlayClipAtPoint (deathSound, transform.position);
 		gameObject.SetActive (false);
 		GameObject.Find("score").transform.GetChild(2).GetComponent<buttonPause>().deadPlayer ();
 	}
