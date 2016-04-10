@@ -85,7 +85,7 @@ public class WeaponScript : MonoBehaviour {
 		Vector3 pos;
 		Vector3 dir;
 		if (ammo == 0)
-			AudioSource.PlayClipAtPoint(audioNoAmmo, transform.position);
+			AudioSource.PlayClipAtPoint (audioNoAmmo, transform.position);
 		while (ammo != 0) {
 			if (ammo != -1)
 				ammo -= 1;
@@ -107,7 +107,7 @@ public class WeaponScript : MonoBehaviour {
 		while (ammo != 0) {
 			if (ammo != -1)
 				ammo -= 1;
-			AudioSource.PlayClipAtPoint(audioShoot, transform.position);
+			AudioSource.PlayClipAtPoint(audioShoot, transform.position);	
 			dir = (target.transform.position - master.transform.position).normalized;
 			pos = transform.position + dir;
 			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;
