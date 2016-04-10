@@ -13,6 +13,7 @@ public class WeaponScript : MonoBehaviour {
 	
 	[HideInInspector]
 	public int 				ammo = 0;
+	public AudioClip		audioShoot;
 	
 	public WeaponType		weaponType = 0;
 	private	float			power = 0;
@@ -71,6 +72,7 @@ public class WeaponScript : MonoBehaviour {
 		while (ammo != 0) {
 			if (ammo != -1)
 				ammo -= 1;
+			AudioSource.PlayClipAtPoint(audioShoot, transform.position);
 			dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
 			pos = transform.position + dir;
 			GameObject obj = Instantiate(shoot, pos, Quaternion.identity) as GameObject;

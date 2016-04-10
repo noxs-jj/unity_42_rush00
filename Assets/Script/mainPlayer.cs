@@ -21,12 +21,16 @@ public class mainPlayer : MonoBehaviour {
 	private SpriteRenderer	sword_weared_sprite;
 	private SpriteRenderer	sniper_weared_sprite;
 
+	private AudioClip		weaponAction;
+	private AudioClip		deathSound;
+
 	// Use this for initialization
 	void Start () {
 		animator = GetComponentInChildren<Animator>();
 		this.player_cam_object = GameObject.Find("MainCamera");
 		this.player_camera = this.player_cam_object.GetComponent<Camera> ();
-
+		weaponAction = Resources.Load ("Audio/Sounds/eject") as AudioClip;
+		deathSound = Resources.Load ("Audio/Sounds/death1") as AudioClip;
 		FindWeaponArms ();
 	}
 
@@ -91,6 +95,7 @@ public class mainPlayer : MonoBehaviour {
 			weapon.DoTakeWeapon(gameObject);
 			DoTakeWearedWeaponSkin();
 		}
+		AudioSource.PlayClipAtPoint (weaponAction, transform.position);
 	}
 	
 	void DropWeapon() {
@@ -101,6 +106,7 @@ public class mainPlayer : MonoBehaviour {
 			haveWeapons = false;
 			weapon.DoDropWeapon(transform.position);
 			weapon = null;
+			AudioSource.PlayClipAtPoint (weaponAction, transform.position);
 		}
 	}
 	
