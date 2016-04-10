@@ -54,7 +54,7 @@ public class RoomScript : MonoBehaviour {
 	public IEnumerator GetRoomCost() {
 		ResetCost ();
 		CalcCost(0);
-		Debug.Log ("CalcCostFinished");
+		//Debug.Log ("CalcCostFinished");
 		yield return new WaitForSeconds (1);
 	}
 

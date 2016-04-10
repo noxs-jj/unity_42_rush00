@@ -174,7 +174,7 @@ public class Enemy : MonoBehaviour {
 		RoomScript tmp = null;
 		int costTmp = -1;
 		if (roomptr != null) {
-			Debug.Log (roomptr.Length);
+			//Debug.Log (roomptr.Length);
 			foreach (RoomScript room in roomptr) {
 				if (costTmp == -1 || room.LocalCost < costTmp && room.LocalCost != -1) {
 					costTmp = room.LocalCost;
@@ -205,6 +205,7 @@ public class Enemy : MonoBehaviour {
 	public void OnTriggerStay2D(Collider2D collider) {
 		if (collider.transform.CompareTag ("Player")) {
 			alert = true;
+			isCheckpoint = false;
 			animate.SetBool ("move", false);
 			setCible (collider.gameObject);
 			awake ();
@@ -231,14 +232,8 @@ public class Enemy : MonoBehaviour {
 
 
 	public void HitEnemy(int hit) {
-		Debug.Log("hey");
+		//Debug.Log("hey");
 		Death ();
-//		if (life - hit <= 0) {
-//			hit = 0;
-//			Death ();
-//		} else {
-//			life -= hit;
-//		}
 	}
 	
 	public void Death() {
