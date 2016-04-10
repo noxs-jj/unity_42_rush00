@@ -186,12 +186,14 @@ public class Enemy : MonoBehaviour {
 				audioSrc.PlayOneShot (targetSound);
 			}
 		} else if (collider.tag == "Shoot" && collider.gameObject.GetComponent<ShootScript> ().GetMasterId () != 1) {
+
 			HitEnemy(collider.GetComponent<ShootScript>().degat);
 		}
 	}
 
 
 	public void HitEnemy(int hit) {
+		Debug.Log("hey");
 		Death ();
 //		if (life - hit <= 0) {
 //			hit = 0;

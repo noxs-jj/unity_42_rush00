@@ -122,6 +122,7 @@ public class mainPlayer : MonoBehaviour {
 	}
 	
 	void	die() {
+		Debug.Log("helloworld");
 		if (isShoot == true)
 			StopCoroutine (shoot);
 		GameObject.Destroy (gameObject);
