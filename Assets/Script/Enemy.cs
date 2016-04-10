@@ -23,19 +23,42 @@ public class Enemy : MonoBehaviour {
 	private int life = 10;
 	private bool haveWeapons = false;
 	public bool alert = false;
-
 	public Sprite[] headBodySprite = new Sprite[10];
+	
+	//roundEnemy
+	public bool pathDefined;
+	private float distance;
+	private float time;
+	private float frameTime;
+	private float distancePerSec;
+	private bool direction;
+	private bool upDown = false;
 
 	// Use this for initialization
 	void Start () {
 
 		//body Head random
+		int i;
+		i = Random.Range (0, 10);
+		pathDefined = false;
+		if (i > 2) {
+			pathDefined = true;
+			if (i > 7)
+				upDown = true;
+		}
 		gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = headBodySprite[Random.Range (0, 3)];
 		gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = headBodySprite[Random.Range (4, 10)];
 
+		//audio
 		this.audioSrc = gameObject.GetComponent<AudioSource> ();
 		this.animate = gameObject.GetComponent<Animator> ();
+
 		ciblePosition = transform.position;
+		//chemin de ronde
+		time = Mathf.RoundToInt(Time.time);
+		distance = 2;
+		time = 3;
+		distancePerSec = distance / time;
 	}
 	
 	public void    rotateEnemy(Vector3 pToGo)
@@ -50,9 +73,33 @@ public class Enemy : MonoBehaviour {
 	void Update () {
 		if (cible && alert) {
 			awake ();
+		} else {
+			if (pathDefined) {
+				RoundTrip ();
+			}
 		}
 		if ( isShoot == true && !alert)
 			StopShoot ();
+	}
+
+	public void RoundTrip () {
+		frameTime += Time.deltaTime;
+		float translate = (distancePerSec * Time.deltaTime);
+		if(frameTime >= time)
+		{
+			translate -= (distancePerSec * (Time.deltaTime - (frameTime - time)));
+			frameTime = 0;
+			direction = !direction;
+		}
+		translate = (direction ? translate : -translate);
+		if (upDown == false) {
+			rotateEnemy( transform.position + new Vector3 (translate, 0, 0));
+			transform.position += new Vector3 (translate, 0, 0);
+		}
+		else {
+			rotateEnemy(transform.position + new Vector3 (0, translate, 0));
+			transform.position += new Vector3 (0, translate, 0);
+		}
 	}
 
 	void awake () {
