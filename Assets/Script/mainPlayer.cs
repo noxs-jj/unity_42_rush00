@@ -111,6 +111,13 @@ public class mainPlayer : MonoBehaviour {
 	}
 	
 	void StartShoot() {
+		Collider2D[] noiseCircleTab = Physics2D.OverlapCircleAll ( new Vector2(transform.position.x, transform.position.y ), 5);
+		foreach(Collider2D enemy in noiseCircleTab)
+		{
+			if (enemy.tag == "enemie") {
+				enemy.GetComponent<Enemy>().OnTriggerStay2D(gameObject.GetComponent<Collider2D>());
+			}
+		}
 		isShoot = true;
 		shoot = weapon.DoShoot(gameObject);
 		StartCoroutine (shoot);
