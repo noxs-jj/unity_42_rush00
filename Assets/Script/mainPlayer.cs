@@ -118,7 +118,7 @@ public class mainPlayer : MonoBehaviour {
 	}
 	
 	void StartShoot() {
-		Collider2D[] noiseCircleTab = Physics2D.OverlapCircleAll ( new Vector2(transform.position.x, transform.position.y ), 5);
+		Collider2D[] noiseCircleTab = Physics2D.OverlapCircleAll ( new Vector2(transform.position.x, transform.position.y ), 10);
 		foreach(Collider2D enemy in noiseCircleTab)
 		{
 			if (enemy.tag == "enemie") {

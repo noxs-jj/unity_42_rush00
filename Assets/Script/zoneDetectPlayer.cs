@@ -15,6 +15,8 @@ public class zoneDetectPlayer : MonoBehaviour {
 			foreach (RoomScript room in this.objs) {
 				room.SetPlayerInRoom (true);
 			}
+		} else if ("enemie" == entity.tag) {
+			(entity.gameObject.GetComponent<Enemy>()).roomptr = objs;
 		}
 	}
 

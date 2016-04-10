@@ -6,7 +6,7 @@ public class RoomScript : MonoBehaviour {
 
 	[HideInInspector]  public int		LocalCost = -1;
 
-	private RoomScript[]		RoomListScript;
+	public RoomScript[]		RoomListScript;
 	public List<GameObject>		RoomList = new List<GameObject>();
 	public bool					isPlayerInRoom = false;
 	private IEnumerator			routineCost;

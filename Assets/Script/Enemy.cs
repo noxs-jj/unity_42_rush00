@@ -40,6 +40,9 @@ public class Enemy : MonoBehaviour {
 	private SpriteRenderer	sword_weared_sprite;
 	private SpriteRenderer	sniper_weared_sprite;
 
+	public RoomScript[]		roomptr;
+	private bool			isCheckpoint = false;
+
 	// Use this for initialization
 	void Start () {
 
@@ -94,7 +97,7 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (cible && alert) {
+		if (cible) {
 			awake ();
 		} else {
 			if (pathDefined) {
@@ -132,7 +135,7 @@ public class Enemy : MonoBehaviour {
 		if (cible) {
 			ciblePosition = cible.transform.position;
 			moveToPoint (ciblePosition);
-			if ( cible.transform.CompareTag ("Player") && haveWeapons == true && isShoot == false)
+			if ( cible.transform.CompareTag ("Player") && haveWeapons == true && isShoot == false && isShoot == true)
 				StartShoot ();
 		} else {
 			ciblePosition = this.transform.position;
@@ -144,11 +147,31 @@ public class Enemy : MonoBehaviour {
 		animate.SetBool ("move", true);
 		float step = 1 * Time.deltaTime;
 		transform.position = Vector3.MoveTowards (transform.position, posTarget, step);
+		if (transform.position == cible.transform.position && isCheckpoint == true)
+			ChangeCible();
 	}
 	
 
+	void ChangeCible() {
+		roomptr = (cible.GetComponent<RoomScript> ()).RoomListScript;
+		setCible (null);
+	}
+
 	public void setCible(GameObject target) {
-		if (target)
+		RoomScript tmp = null;
+		int costTmp = -1;
+		if (roomptr != null) {
+			Debug.Log (roomptr.Length);
+			foreach (RoomScript room in roomptr) {
+				if (costTmp == -1 || room.LocalCost < costTmp && room.LocalCost != -1) {
+					costTmp = room.LocalCost;
+					tmp = room;
+				}
+			}
+			isCheckpoint = true;
+			this.cible = tmp.gameObject;
+		}
+		else if (target != null)
 			this.cible = target;
 	}
 
@@ -158,7 +181,7 @@ public class Enemy : MonoBehaviour {
 		alert = false;
 	}
 	public void OnTriggerExit2D(Collider2D collider) {
-		StartCoroutine (isFollowing ());
+		//StartCoroutine (isFollowing ());
 	}
 	public void OnTriggerStay2D(Collider2D collider) {
 		if (collider.transform.CompareTag ("Player")) {
