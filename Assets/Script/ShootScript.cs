@@ -36,16 +36,12 @@ public class ShootScript : MonoBehaviour {
 			life = lifeTime();
 			StartCoroutine(life);
 		}
-	
-
 		Vector3 moveDirection = transform.position - MasterPos; 
 		if (moveDirection != Vector3.zero)
 		{
-			Debug.Log ("hello");
 			float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
 			transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 		}
-
 	}
 
 	public int GetMasterId() {

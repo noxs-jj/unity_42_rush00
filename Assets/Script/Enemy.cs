@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour {
 	private IEnumerator	 shoot;
 	private bool		 isShoot = false;
 	private GameObject 	 onWeapon;
-	private WeaponScriptEnemy weapon;
+	private WeaponScript weapon;
 
 	//audio
 	private AudioSource  audioSrc;
@@ -33,6 +33,11 @@ public class Enemy : MonoBehaviour {
 	private float distancePerSec;
 	private bool direction;
 	private bool upDown = false;
+
+	private SpriteRenderer	uzi_weared_sprite;
+	private SpriteRenderer	shotgun_weared_sprite;
+	private SpriteRenderer	sword_weared_sprite;
+	private SpriteRenderer	sniper_weared_sprite;
 
 	// Use this for initialization
 	void Start () {
@@ -59,8 +64,25 @@ public class Enemy : MonoBehaviour {
 		distance = 2;
 		time = 3;
 		distancePerSec = distance / time;
+
+		FindWeaponArms ();
 	}
-	
+
+	void FindWeaponArms() {
+		SpriteRenderer[] list = GetComponentsInChildren<SpriteRenderer> ();
+		foreach (SpriteRenderer elem in list) {
+			if (elem.name == "weared_Uzi_1")
+				this.uzi_weared_sprite = elem;
+			else if (elem.name == "weared_Shotgun_2")
+				this.shotgun_weared_sprite = elem;
+			else if (elem.name == "weared_Saber_5")
+				this.sword_weared_sprite = elem;
+			else if (elem.name == "weared_Sniper_11")
+				this.sniper_weared_sprite = elem;
+		}
+		DoDropWearedWeaponSkin ();
+	}
+
 	public void    rotateEnemy(Vector3 pToGo)
 	{
 		Vector3 lookPos = pToGo - transform.position;
@@ -119,7 +141,7 @@ public class Enemy : MonoBehaviour {
 	public void moveToPoint (Vector3 posTarget) {
 		rotateEnemy (this.ciblePosition);
 		animate.SetBool ("move", true);
-		float step = 0 * Time.deltaTime;
+		float step = 1 * Time.deltaTime;
 		transform.position = Vector3.MoveTowards (transform.position, posTarget, step);
 	}
 	
@@ -146,9 +168,10 @@ public class Enemy : MonoBehaviour {
 		} else if (collider.tag == "Weapons") {
 			if (haveWeapons == false) {
 				onWeapon = collider.gameObject;
-				weapon = onWeapon.GetComponent<WeaponScriptEnemy> ();
-				weapon.DoTakeWeapon (gameObject, cible);
+				weapon = onWeapon.GetComponent<WeaponScript> ();
+				weapon.DoTakeWeapon (gameObject);
 				haveWeapons = true;
+				DoTakeWearedWeaponSkin();
 			}
 		} else if (collider.tag == "Shoot") {
 			Debug.Log(life);
@@ -169,6 +192,7 @@ public class Enemy : MonoBehaviour {
 	public void Death() {
 		if (isShoot == true)
 			StopShoot ();
+		DoDropWearedWeaponSkin ();
 		audioSrc.PlayOneShot(deathSound);
 		weapon.DoDropWeapon(transform.position);
 		GameObject.Destroy (gameObject);
@@ -183,5 +207,25 @@ public class Enemy : MonoBehaviour {
 	void StopShoot() {
 		isShoot = false;
 		StopCoroutine (shoot);
+	}
+
+	//Sceen of weapon on in hand
+	private void DoDropWearedWeaponSkin () {
+		this.uzi_weared_sprite.enabled = false;
+		this.shotgun_weared_sprite.enabled = false;
+		this.sword_weared_sprite.enabled = false;
+		this.sniper_weared_sprite.enabled = false;
+	}
+	
+	private void DoTakeWearedWeaponSkin(){
+		if (weapon.weaponType == WeaponScript.WeaponType.UZI) {
+			this.uzi_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.SHOTGUN) {
+			this.shotgun_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.SABER) {
+			this.sword_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.SNIPER) {
+			this.sniper_weared_sprite.enabled = true;
+		}
 	}
 }

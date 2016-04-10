@@ -15,14 +15,21 @@ public class mainPlayer : MonoBehaviour {
 	private mouseCursor		mouse_script;
 	public GameObject		player_cam_object;
 	private Camera			player_camera;
-	
+
+	private SpriteRenderer	uzi_weared_sprite;
+	private SpriteRenderer	shotgun_weared_sprite;
+	private SpriteRenderer	sword_weared_sprite;
+	private SpriteRenderer	sniper_weared_sprite;
+
 	// Use this for initialization
 	void Start () {
 		animator = GetComponentInChildren<Animator>();
 		this.player_cam_object = GameObject.Find("MainCamera");
 		this.player_camera = this.player_cam_object.GetComponent<Camera> ();
+
+		FindWeaponArms ();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		bool isMoving = false;
@@ -56,7 +63,22 @@ public class mainPlayer : MonoBehaviour {
 		//mouse
 		update_mouse_position ();
 	}
-	
+
+	void FindWeaponArms() {
+		SpriteRenderer[] list = GetComponentsInChildren<SpriteRenderer> ();
+		foreach (SpriteRenderer elem in list) {
+			if (elem.name == "weared_Uzi_1")
+				this.uzi_weared_sprite = elem;
+			else if (elem.name == "weared_Shotgun_2")
+				this.shotgun_weared_sprite = elem;
+			else if (elem.name == "weared_Saber_5")
+				this.sword_weared_sprite = elem;
+			else if (elem.name == "weared_Sniper_11")
+				this.sniper_weared_sprite = elem;
+		}
+		DoDropWearedWeaponSkin ();
+	}
+
 	void update_mouse_position(){
 		Vector3 mousePos = this.player_camera.ScreenToWorldPoint(Input.mousePosition);
 		gameObject.transform.rotation = Quaternion.LookRotation(Vector3.forward, -(mousePos - transform.position));
@@ -67,6 +89,7 @@ public class mainPlayer : MonoBehaviour {
 			haveWeapons = true;
 			weapon = onWeapon.GetComponent<WeaponScript>();
 			weapon.DoTakeWeapon(gameObject);
+			DoTakeWearedWeaponSkin();
 		}
 	}
 	
@@ -74,6 +97,7 @@ public class mainPlayer : MonoBehaviour {
 		if (weapon != null) {
 			if (isShoot == true)
 				StopShoot();
+			DoDropWearedWeaponSkin ();
 			haveWeapons = false;
 			weapon.DoDropWeapon(transform.position);
 			weapon = null;
@@ -108,5 +132,25 @@ public class mainPlayer : MonoBehaviour {
 	
 	void OnTriggerExit2D(Collider2D collide) {
 		onWeapon = null;
+	}
+
+	//Sceen of weapon on in hand
+	private void DoDropWearedWeaponSkin () {
+		this.uzi_weared_sprite.enabled = false;
+		this.shotgun_weared_sprite.enabled = false;
+		this.sword_weared_sprite.enabled = false;
+		this.sniper_weared_sprite.enabled = false;
+	}
+	
+	private void DoTakeWearedWeaponSkin(){
+		if (weapon.weaponType == WeaponScript.WeaponType.UZI) {
+			this.uzi_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.SHOTGUN) {
+			this.shotgun_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.SABER) {
+			this.sword_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.SNIPER) {
+			this.sniper_weared_sprite.enabled = true;
+		}
 	}
 }

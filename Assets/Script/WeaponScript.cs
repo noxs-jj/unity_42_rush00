@@ -20,13 +20,6 @@ public class WeaponScript : MonoBehaviour {
 	private GameObject		shoot;
 	private float			fireRate = 1;
 	
-	private SpriteRenderer	uzi_weared_sprite;
-	private SpriteRenderer	shotgun_weared_sprite;
-	private SpriteRenderer	sword_weared_sprite;
-	private SpriteRenderer	sniper_weared_sprite;
-	
-	
-	
 	// Use this for initialization
 	void Start () {
 		if (weaponType == WeaponType.SABER) {
@@ -46,14 +39,6 @@ public class WeaponScript : MonoBehaviour {
 			ammo = 30;
 			fireRate = 3;
 		}
-		this.uzi_weared_sprite = GameObject.Find ("weared_Uzi_1").GetComponent<SpriteRenderer>();
-		this.uzi_weared_sprite.enabled = false;
-		this.shotgun_weared_sprite = GameObject.Find ("weared_Shotgun_2").GetComponent<SpriteRenderer>();
-		this.shotgun_weared_sprite.enabled = false;
-		this.sword_weared_sprite = GameObject.Find ("weared_Saber_5").GetComponent<SpriteRenderer>();
-		this.sword_weared_sprite.enabled = false;
-		this.sniper_weared_sprite = GameObject.Find ("weared_Sniper_11").GetComponent<SpriteRenderer>();
-		this.sniper_weared_sprite.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -70,17 +55,14 @@ public class WeaponScript : MonoBehaviour {
 		transform.position = playerPos;
 		power = 125;
 		Vector3 mousePos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-		dropDir = mousePos;
-
-
-		DoDropWearedWeaponSkin ();
-		
+		dropDir = mousePos;	
 	}
-	
+
 	public void DoTakeWeapon (GameObject obj) {
 		transform.parent = obj.transform;
-		DoTakeWearedWeaponSkin ();
 		gameObject.GetComponent<SpriteRenderer> ().enabled = false;
+		if (obj.tag == "enemie")
+			ammo = -1;
 	}
 	
 	public IEnumerator DoShoot(GameObject master) {
@@ -99,24 +81,5 @@ public class WeaponScript : MonoBehaviour {
 			yield return new WaitForSeconds (fireRate);
 		}
 	}
-	
-	//Sceen of weapon on in hand
-	private void DoDropWearedWeaponSkin () {
-		this.uzi_weared_sprite.enabled = false;
-		this.shotgun_weared_sprite.enabled = false;
-		this.sword_weared_sprite.enabled = false;
-		this.sniper_weared_sprite.enabled = false;
-	}
-	
-	private void DoTakeWearedWeaponSkin(){
-		if (weaponType == WeaponType.UZI) {
-			this.uzi_weared_sprite.enabled = true;
-		} else if (weaponType == WeaponType.SHOTGUN) {
-			this.shotgun_weared_sprite.enabled = true;
-		} else if (weaponType == WeaponType.SABER) {
-			this.sword_weared_sprite.enabled = true;
-		} else if (weaponType == WeaponType.SNIPER) {
-			this.sniper_weared_sprite.enabled = true;
-		}
-	}
+
 }
