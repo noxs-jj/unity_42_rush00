@@ -24,8 +24,11 @@ public class mainPlayer : MonoBehaviour {
 	private AudioClip		weaponAction;
 	private AudioClip		deathSound;
 
+	private bool 			pauseBool;
+
 	// Use this for initialization
 	void Start () {
+		pauseBool = false;
 		animator = GetComponentInChildren<Animator>();
 		this.player_cam_object = GameObject.Find("MainCamera");
 		this.player_camera = this.player_cam_object.GetComponent<Camera> ();
@@ -37,6 +40,10 @@ public class mainPlayer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		bool isMoving = false;
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			pauseBool = !pauseBool;
+			GameObject.Find("pause").transform.GetChild(0).GetComponent<buttonPause>().pause(pauseBool);
+		}
 		if (Input.GetKey (KeyCode.W)) {
 			isMoving = true;
 			transform.position += Vector3.up * Time.deltaTime * speed;
