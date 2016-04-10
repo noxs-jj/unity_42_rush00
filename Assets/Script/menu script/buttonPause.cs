@@ -44,9 +44,14 @@ public class buttonPause : MonoBehaviour {
 	}
 
 	public void deadPlayer () {
-
-		GameObject.Find ("rangScore").GetComponent<Text> ().text = "Vous avez perdu";
+		GameObject.Find ("rangScore").GetComponent<Text> ().text = "Loser";
 		GameObject.Find ("score").GetComponent<Canvas> ().enabled = true;
 		GameObject.Find ("loadScene2").GetComponent<Button> ().enabled = false;
+	}
+
+	public void winPlayer () {
+		GameObject.Find ("rangScore").GetComponent<Text> ().text = "Winner";
+		GameObject.Find ("score").GetComponent<Canvas> ().enabled = true;
+		GameObject.Find ("loadScene2").GetComponent<Button> ().enabled = true;
 	}
 }
