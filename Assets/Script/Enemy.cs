@@ -87,11 +87,12 @@ public class Enemy : MonoBehaviour {
 		yield return new WaitForSeconds (5.0f);
 		alert = false;
 	}
-
-	public void OnTriggerEnter2D(Collider2D collider) {
+	public void OnTriggerExit2D(Collider2D collider) {
+		StartCoroutine (isFollowing ());
+	}
+	public void OnTriggerStay2D(Collider2D collider) {
 		if (collider.transform.CompareTag ("Player")) {
 			alert = true;
-			StartCoroutine(isFollowing());
 			animate.SetBool ("move", false);
 			setCible (collider.gameObject);
 			awake ();
