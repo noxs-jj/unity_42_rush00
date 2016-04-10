@@ -167,4 +167,18 @@ public class mainPlayer : MonoBehaviour {
 			this.sniper_weared_sprite.enabled = true;
 		}
 	}
+
+	public string get_weapon_name(){
+		if (null == weapon)
+			return "Empty";
+		else
+			return weapon.name;
+	}
+
+	public int get_weapon_ammo(){
+		if (null == weapon)
+			return -999;
+		else
+			return weapon.ammo;
+	}
 }
