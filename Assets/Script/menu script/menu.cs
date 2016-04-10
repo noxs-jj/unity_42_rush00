@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class menu : MonoBehaviour {
-	
+
 	public void startGame () {
 		Debug.Log ("loadLevel");
 		Application.LoadLevel (0);
