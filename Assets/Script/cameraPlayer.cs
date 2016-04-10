@@ -8,7 +8,7 @@ public class cameraPlayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.main_player_object = GameObject.Find ("main_player_group");
+		this.main_player_object = GameObject.Find ("Player");
 //		this.main_player_script = this.main_player_object.GetComponent<mainPlayer> ();
 	}
 	
