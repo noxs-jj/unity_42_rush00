@@ -170,7 +170,7 @@ public class Enemy : MonoBehaviour {
 			if (haveWeapons == false) {
 				onWeapon = collider.gameObject;
 				weapon = onWeapon.GetComponent<WeaponScript> ();
-				weapon.DoTakeWeapon (gameObject);
+  				weapon.DoTakeWeapon (gameObject);
 				haveWeapons = true;
 				DoTakeWearedWeaponSkin();
 			}
