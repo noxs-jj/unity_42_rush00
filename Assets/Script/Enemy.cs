@@ -7,12 +7,9 @@ public class Enemy : MonoBehaviour {
 	// Animation
 	private Animator animate;
 	private Vector3	ciblePosition;
-	private int   	time;
 	
 	// Control
 	public GameObject 	 cible;
-	private bool 	  	 trigger;
-	private bool	  	 wait;
 	private IEnumerator	 shoot;
 	private bool		 isShoot = false;
 	private GameObject 	 onWeapon;
@@ -27,41 +24,17 @@ public class Enemy : MonoBehaviour {
 	private bool haveWeapons = false;
 	public bool alert = false;
 
-	public enum headType
-	{
-		BODY_1,
-		BODY_2,
-		BODY_3,
-		HEAD_1,
-		HEAD_2,
-		HEAD_3,
-		HEAD_4,
-		HEAD_5,
-		HEAD_6,
-		HEAD_7
-	}
-
-	private SpriteRenderer	body;
-	private SpriteRenderer	head;
+	public Sprite[] headBodySprite = new Sprite[10];
 
 	// Use this for initialization
 	void Start () {
 
-		///body random
-		/*int body = Random.Range (0, 3);
-		if (body == 2) {
-			gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = GameObject.Find ("body_1").GetComponent<Sprite> ();
-		} else if (body == 2) {
-			gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = GameObject.Find ("body_2").GetComponent<Sprite> ();
-		} else {
-			gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = GameObject.Find ("body_3").GetComponent<Sprite> ();
-		}*/
+		//body Head random
+		gameObject.transform.GetChild(1).GetComponent<SpriteRenderer>().sprite = headBodySprite[Random.Range (0, 3)];
+		gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = headBodySprite[Random.Range (4, 10)];
 
 		this.audioSrc = gameObject.GetComponent<AudioSource> ();
 		this.animate = gameObject.GetComponent<Animator> ();
-		trigger = false;
-		wait = false;
-		time = Mathf.RoundToInt(Time.time);
 		ciblePosition = transform.position;
 	}
 	
@@ -75,16 +48,16 @@ public class Enemy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (alert && cible) {
+		if (cible && alert) {
 			awake ();
-		} else {
-			alert = false;
 		}
+		if ( isShoot == true && !alert)
+			StopShoot ();
 	}
 
 	void awake () {
 		if (life <= 0) {
-			death ();
+			Death ();
 		}
 		if (cible) {
 			ciblePosition = cible.transform.position;
@@ -94,51 +67,72 @@ public class Enemy : MonoBehaviour {
 		} else {
 			ciblePosition = this.transform.position;
 		}
-		if ( isShoot == true && !cible)
-			StopShoot ();
 	}
 	
 	public void moveToPoint (Vector3 posTarget) {
 		rotateEnemy (this.ciblePosition);
 		animate.SetBool ("move", true);
-		float step = 3 * Time.deltaTime;
+		float step = 0 * Time.deltaTime;
 		transform.position = Vector3.MoveTowards (transform.position, posTarget, step);
 	}
 	
+
 	public void setCible(GameObject target) {
-		this.cible = target;
+		if (target)
+			this.cible = target;
 	}
-	
-	public void OnTriggerStay2D(Collider2D collider) {
+
+	IEnumerator isFollowing()
+	{
+		yield return new WaitForSeconds (5.0f);
+		alert = false;
+	}
+
+	public void OnTriggerEnter2D(Collider2D collider) {
 		if (collider.transform.CompareTag ("Player")) {
+			alert = true;
+			StartCoroutine(isFollowing());
 			animate.SetBool ("move", false);
-			setCible(collider.gameObject);
-			awake();
+			setCible (collider.gameObject);
+			awake ();
 		} else if (collider.tag == "Weapons") {
 			if (haveWeapons == false) {
 				onWeapon = collider.gameObject;
-				weapon = onWeapon.GetComponent<WeaponScriptEnemy>();
-				weapon.DoTakeWeapon(gameObject, cible);
+				weapon = onWeapon.GetComponent<WeaponScriptEnemy> ();
+				weapon.DoTakeWeapon (gameObject, cible);
 				haveWeapons = true;
 			}
+		} else if (collider.tag == "Shoot") {
+			Debug.Log(life);
+			HitEnemy(collider.GetComponent<ShootScript>().degat);
 		}
 	}
 
-	public void death() {
+
+	public void HitEnemy(int hit) {
+		if (life - hit <= 0) {
+			hit = 0;
+			Death ();
+		} else {
+			life -= hit;
+		}
+	}
+	
+	public void Death() {
+		if (isShoot == true)
+			StopShoot ();
 		audioSrc.PlayOneShot(deathSound);
 		weapon.DoDropWeapon(transform.position);
 		GameObject.Destroy (gameObject);
 	}
 
 	void StartShoot() {
-		Debug.Log("shot");
 		isShoot = true;
 		shoot = weapon.DoShoot(gameObject);
 		StartCoroutine (shoot);
 	}
 
 	void StopShoot() {
-		Debug.Log("unshot");
 		isShoot = false;
 		StopCoroutine (shoot);
 	}

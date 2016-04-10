@@ -9,6 +9,11 @@ public class ShootScript : MonoBehaviour {
 	private float speed = 10;
 	private bool	isMoving;
 	private IEnumerator life;
+
+	///florian
+	[HideInInspector]public int degat = 5;
+	/// florian
+
 	// Use this for initialization
 	void Start () {
 	
