@@ -139,6 +139,8 @@ public class mainPlayer : MonoBehaviour {
 		Debug.Log("helloworld");
 		if (isShoot == true)
 			StopCoroutine (shoot);
+
+		GameObject.Find("score").transform.GetChild(2).GetComponent<buttonPause>().pause(pauseBool);
 		GameObject.Destroy (gameObject);
 		
 	}

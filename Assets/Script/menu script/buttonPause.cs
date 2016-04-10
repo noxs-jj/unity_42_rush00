@@ -36,4 +36,8 @@ public class buttonPause : MonoBehaviour {
 		GameObject.Find ("confirm").GetComponent<Canvas>().enabled = false;
 		GameObject.Find ("pause").GetComponent<Canvas>().enabled = true;
 	}
+
+	public void loadLevel (int level) {
+		Application.LoadLevel (level);
+	}
 }
