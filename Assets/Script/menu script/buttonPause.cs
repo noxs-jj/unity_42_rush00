@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class buttonPause : MonoBehaviour {
+
 
 	void Start () {
 	}
@@ -39,5 +41,12 @@ public class buttonPause : MonoBehaviour {
 
 	public void loadLevel (int level) {
 		Application.LoadLevel (level);
+	}
+
+	public void deadPlayer () {
+
+		GameObject.Find ("rangScore").GetComponent<Text> ().text = "Vous avez perdu";
+		GameObject.Find ("score").GetComponent<Canvas> ().enabled = true;
+		GameObject.Find ("loadScene2").GetComponent<Button> ().enabled = false;
 	}
 }

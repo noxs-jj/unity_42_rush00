@@ -136,13 +136,10 @@ public class mainPlayer : MonoBehaviour {
 	}
 	
 	void	die() {
-		Debug.Log("helloworld");
 		if (isShoot == true)
 			StopCoroutine (shoot);
-
-		GameObject.Find("score").transform.GetChild(2).GetComponent<buttonPause>().pause(pauseBool);
-		GameObject.Destroy (gameObject);
-		
+		gameObject.SetActive (false);
+		GameObject.Find("score").transform.GetChild(2).GetComponent<buttonPause>().deadPlayer ();
 	}
 	
 	void OnTriggerEnter2D(Collider2D collide) {
