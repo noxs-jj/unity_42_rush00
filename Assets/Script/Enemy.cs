@@ -135,7 +135,7 @@ public class Enemy : MonoBehaviour {
 		if (cible) {
 			ciblePosition = cible.transform.position;
 			moveToPoint (ciblePosition);
-			if ( cible.transform.CompareTag ("Player") && haveWeapons == true && isShoot == false && isShoot == true)
+			if ( cible.transform.CompareTag ("Player") && haveWeapons == true && isShoot == false && !isCheckpoint)
 				StartShoot ();
 		} else {
 			ciblePosition = this.transform.position;
@@ -177,11 +177,13 @@ public class Enemy : MonoBehaviour {
 
 	IEnumerator isFollowing()
 	{
-		yield return new WaitForSeconds (5.0f);
+		yield return new WaitForSeconds (8.0f);
 		alert = false;
+		cible = null;
+		isCheckpoint = false;
 	}
 	public void OnTriggerExit2D(Collider2D collider) {
-		//StartCoroutine (isFollowing ());
+		StartCoroutine (isFollowing ());
 	}
 	public void OnTriggerStay2D(Collider2D collider) {
 		if (collider.transform.CompareTag ("Player")) {
