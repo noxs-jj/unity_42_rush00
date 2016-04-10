@@ -9,6 +9,7 @@ public class WeaponScript : MonoBehaviour {
 		UZI,
 		SHOTGUN,
 		SNIPER,
+		DARK,
 	}
 	
 	[HideInInspector]
@@ -32,6 +33,8 @@ public class WeaponScript : MonoBehaviour {
 			shoot = Resources.Load("Prefabs/WeaponShoot/ShotgunShoot") as GameObject;
 		} else if (weaponType == WeaponType.SNIPER) {
 			shoot = Resources.Load("Prefabs/WeaponShoot/SniperShoot") as GameObject;
+		} else if (weaponType == WeaponType.DARK) {
+			shoot = Resources.Load("Prefabs/WeaponShoot/DarkShoot") as GameObject;
 		}
 		initAmmo ();
 		audioNoAmmo = Resources.Load ("Audio/Sounds/dry_fire") as AudioClip;
@@ -68,6 +71,9 @@ public class WeaponScript : MonoBehaviour {
 		} else if (weaponType == WeaponType.SNIPER) {
 			ammo = 30;
 			fireRate = 3;
+		} else if (weaponType == WeaponType.DARK) {
+			ammo = -1;
+			fireRate = 0.1f;
 		}
 	}
 

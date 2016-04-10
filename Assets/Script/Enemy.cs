@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour {
 	private SpriteRenderer	shotgun_weared_sprite;
 	private SpriteRenderer	sword_weared_sprite;
 	private SpriteRenderer	sniper_weared_sprite;
+	private SpriteRenderer	dark_weared_sprite;
 
 	public RoomScript[]		roomptr;
 	private bool			isCheckpoint = false;
@@ -86,6 +87,8 @@ public class Enemy : MonoBehaviour {
 				this.sword_weared_sprite = elem;
 			else if (elem.name == "weared_Sniper_11")
 				this.sniper_weared_sprite = elem;
+			else if (elem.name == "weared_Dark_10")
+				this.dark_weared_sprite = elem;
 		}
 		DoDropWearedWeaponSkin ();
 	}
@@ -264,6 +267,7 @@ public class Enemy : MonoBehaviour {
 		this.shotgun_weared_sprite.enabled = false;
 		this.sword_weared_sprite.enabled = false;
 		this.sniper_weared_sprite.enabled = false;
+		this.dark_weared_sprite.enabled = false;
 	}
 	
 	private void DoTakeWearedWeaponSkin(){
@@ -275,6 +279,8 @@ public class Enemy : MonoBehaviour {
 			this.sword_weared_sprite.enabled = true;
 		} else if (weapon.weaponType == WeaponScript.WeaponType.SNIPER) {
 			this.sniper_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.DARK) {
+			this.dark_weared_sprite.enabled = true;
 		}
 	}
 }

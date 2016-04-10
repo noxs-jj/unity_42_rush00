@@ -20,11 +20,14 @@ public class mainPlayer : MonoBehaviour {
 	private SpriteRenderer	shotgun_weared_sprite;
 	private SpriteRenderer	sword_weared_sprite;
 	private SpriteRenderer	sniper_weared_sprite;
+	private SpriteRenderer	dark_weared_sprite;
 
 	private AudioClip		weaponAction;
 	private AudioClip		deathSound;
 
 	private bool 			pauseBool;
+	private int				code = 0;
+	private GameObject		DarkWeapon;
 
 	// Use this for initialization
 	void Start () {
@@ -35,6 +38,7 @@ public class mainPlayer : MonoBehaviour {
 		weaponAction = Resources.Load ("Audio/Sounds/eject") as AudioClip;
 		deathSound = Resources.Load ("Audio/Sounds/death1") as AudioClip;
 		FindWeaponArms ();
+		DarkWeapon = Resources.Load ("Prefabs/weapons/Dark") as GameObject;
 	}
 
 	// Update is called once per frame
@@ -70,9 +74,29 @@ public class mainPlayer : MonoBehaviour {
 			StartShoot ();
 		else if (!Input.GetMouseButton (0) && isShoot == true)
 			StopShoot ();
-		
+
+		DarkFunction ();		
 		//mouse
 		update_mouse_position ();
+	}
+
+	void DarkFunction() {
+		if (Input.GetKey (KeyCode.UpArrow) && code > 1)
+			code++;
+		else if (Input.GetKey (KeyCode.DownArrow) && code >= 2 && code < 4)
+			code++;
+		else if (Input.GetKey (KeyCode.LeftArrow) && code == 4 && code == 6)
+			code++;
+		else if (Input.GetKey (KeyCode.RightArrow) && code == 5 && code == 7)
+			code++;
+		else if (Input.GetKey (KeyCode.B) && code == 8)
+			code++;
+		else if (Input.GetKey (KeyCode.A) && code == 9)
+			code++;
+		if (code == 9) {
+//			Instantiate(shoot, transform.position, Quaternion.identity);
+		}
+
 	}
 
 	void FindWeaponArms() {
@@ -86,6 +110,8 @@ public class mainPlayer : MonoBehaviour {
 				this.sword_weared_sprite = elem;
 			else if (elem.name == "weared_Sniper_11")
 				this.sniper_weared_sprite = elem;
+			else if (elem.name == "weared_Dark_10")
+				this.dark_weared_sprite = elem;
 		}
 		DoDropWearedWeaponSkin ();
 	}
@@ -160,6 +186,7 @@ public class mainPlayer : MonoBehaviour {
 		this.shotgun_weared_sprite.enabled = false;
 		this.sword_weared_sprite.enabled = false;
 		this.sniper_weared_sprite.enabled = false;
+		this.dark_weared_sprite.enabled = false;
 	}
 	
 	private void DoTakeWearedWeaponSkin(){
@@ -171,6 +198,8 @@ public class mainPlayer : MonoBehaviour {
 			this.sword_weared_sprite.enabled = true;
 		} else if (weapon.weaponType == WeaponScript.WeaponType.SNIPER) {
 			this.sniper_weared_sprite.enabled = true;
+		} else if (weapon.weaponType == WeaponScript.WeaponType.DARK) {
+			this.dark_weared_sprite.enabled = true;
 		}
 	}
 
