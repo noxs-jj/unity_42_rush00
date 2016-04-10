@@ -13,11 +13,10 @@ public class doorEvent : MonoBehaviour {
 
 	private void OnTriggerEnter2D(Collider2D obj){
 		//Debug.Log ("OnTriggerEnter2D IN name=" + obj.name);
-		if (obj.name == "Player" || obj.name == "Enemy") {
+		if ( obj.name == "Player" || obj.name.Contains("Enemy") )  {
 			StartCoroutine (remove_collider_physic_after_time (0.40f));
 			this.animator_object.SetTrigger ("open_launcher");
 		}
-		
 	}
 
 	private IEnumerator remove_collider_physic_after_time(float delay) {
@@ -27,7 +26,7 @@ public class doorEvent : MonoBehaviour {
 
 	private void OnTriggerExit2D(Collider2D obj){
 		//Debug.Log ("OnTriggerExit2D OUT name=" + obj.name);
-		if (obj.name == "Player" || obj.name == "Enemy") {
+		if ( obj.name == "Player" || obj.name.Contains("Enemy") ) {
 			StartCoroutine (put_collider_physic_after_time (0.40f));
 			this.animator_object.SetTrigger ("close_launcher");
 		}
